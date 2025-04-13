@@ -6,14 +6,17 @@
 N_ZC = 839;          % Zadoff-Chu sequence length
 u = 25;              % Root index; must be coprime with N_ZC
 delay_samples = 0;   % Artificial channel delay
+delay_samples_1 = 0;
 SNR_dB = 50;         % Signal-to-noise ratio in dB
 
 % Step 1: Generate Zadoff-Chu sequence
 n = 0:N_ZC-1;
 zc_seq = exp(-1j * pi * u * n .* (n + 1) / N_ZC);
+zc_seq_1 = exp(-1j * pi * u * n .* (n + 1) / N_ZC);
+zc_seq_1 = circshift(zc_seq_1,838/2);
 
 % Step 2: Create transmitted signal
-tx = zc_seq;
+tx = zc_seq + zc_seq_1;
 
 % Step 3: Create received signal with delay and AWGN
 rx = [zeros(1, delay_samples), tx];    % Add delay
